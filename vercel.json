@@ -1,0 +1,26 @@
+{
+    "version": 2,
+    "builds": [
+      {
+        "src": "index.js",
+        "use": "@vercel/node",
+        "config": {
+          "runtime": "nodejs14.x"
+        }
+      }
+    ],
+    "routes": [
+      {
+        "src": "/api/users/*",
+        "dest": "index.js"
+      },
+      {
+        "src": "/api/posts/*",
+        "dest": "index.js"
+      },
+      {
+        "src": "/uploads/*",
+        "dest": "uploads"
+      }
+    ]
+  }
