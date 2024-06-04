@@ -39,7 +39,7 @@ const createPost = async(req,res,next)=>{
 //GetPosts  Get:api/posts   Unprotected
 const getPosts = async(req,res,next)=>{
     try {
-        const posts=await Post.find().sort({updateAt:-1})
+        const posts = await Post.aggregate([{ $sample: { size: 18 } }])
         res.status(200).json(posts)
     } catch (error) {
         return next(new HttpError(error))
