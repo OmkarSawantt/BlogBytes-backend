@@ -13,7 +13,7 @@
     }
   ],
   "env": {
-    "MONGO__URI": "",
+    "MONGO__URI": "mongodb+srv://omkar981952:XjcGwsaYlGGrFOF5@cluster1.zzkwt0z.mongodb.net/?retryWrites=true&w=majority&appName=Cluster1/New",
     "PORT": "5000"
   }
 }
