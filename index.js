@@ -17,7 +17,7 @@ app.use(cors({credentials:true, origin:['https://blog-bytes.vercel.app', 'http:/
 app.use(upload())
 app.use('/uploads', express.static(path.join(__dirname, 'public/uploads')));
 app.get('/', (req, res) => {
-  res.send('<h1>Hello, World!</h1><img src="/uploads/your_image.jpg" alt="My Image">');
+  res.send('<h1>Hello, World!</h1><img src="/uploads/images.jpg" alt="My Image">');
 });
 app.use('/api/users',userRoutes)
 app.use('/api/posts',postRoutes)
