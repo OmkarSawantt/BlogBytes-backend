@@ -126,16 +126,22 @@ const searchSugestion = async(req,res,next)=>{
     }
 }
 
-const searchResult = async(req,res,next)=>{
-    try{
-        const {text}=req.body;
-        if (/^ $/.test(text)) {
+const searchResult = async (req, res, next) => {
+    try {
+        let { text } = req.body;
+
+        // Convert text to a string if it's not already
+        text = String(text).trim();
+
+        if (/^$/.test(text)) {
             return res.status(400).json({ error: 'Invalid input. Cannot be empty or only spaces.' });
         }
+
         const posts = await Post.find({ title: { $regex: text, $options: 'i' } }).sort({ createdAt: -1 });
         res.json(posts);
-    }catch(error){
-        return next(new HttpError(error))
+    } catch (error) {
+        return next(new HttpError(error));
     }
-}
+};
+
 module.exports={createPost,getPosts,getPost,getCatPosts,getUserPosts,editPost,deletePost,searchSugestion,searchResult}
