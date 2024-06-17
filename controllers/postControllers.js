@@ -134,7 +134,7 @@ const searchResult = async (req, res, next) => {
         text = String(text).trim();
 
         if (/^$/.test(text)) {
-            return res.status(400).json({ error: 'Invalid input. Cannot be empty or only spaces.' });
+            return res.json({[});
         }
 
         const posts = await Post.find({ title: { $regex: text, $options: 'i' } }).sort({ createdAt: -1 });
