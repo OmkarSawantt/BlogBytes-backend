@@ -128,8 +128,7 @@ const searchSugestion = async(req,res,next)=>{
 
 const searchResult = async(req,res,next)=>{
     try{
-        const text = String(req.body.text);
-        
+        const {text}=req.body;
         if (/^ $/.test(text)) {
             return res.status(400).json({ error: 'Invalid input. Cannot be empty or only spaces.' });
         }
