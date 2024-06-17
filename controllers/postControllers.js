@@ -8,29 +8,18 @@ const HttpError = require("../models/errorModel")
 //CreatePost  Post:api/posts   protected
 const createPost = async(req,res,next)=>{
     try {
-        let {title,category,description}=req.body;
-        if(!title || !category || !description || !req.files){
+        let {title,category,description,thumbnail}=req.body;
+        if(!title || !category || !description || !thumbnail){
             return next(new HttpError("Fill in all fields and choose thubnail",422));
         }
-        const {thumbnail}=req.files
-        if(thumbnail.size>2000000){
-            return next(new HttpError("Thumbnail is too big.It should be less than 2 mb "))
+        const newPost=await Post.create({title,category,description,thumbnail,creator:req.user.id})
+        if(!newPost){
+            return next(new HttpError("Post couldn't be created.",422))
         }
-        let fileName=thumbnail.name; 
-        let splittedFilename=fileName.split('.')
-        let newFilename=splittedFilename[0]+uuid()+'.'+splittedFilename[splittedFilename.length-1]
-                const newPost=await Post.create({title,category,description,thumbnail:newFilename,creator:req.user.id})
-                if(!newPost){
-                    return next(new HttpError("Post couldn't be created.",422))
-                }
-                const currentUser=await User.findById(req.user.id);
-                const userPostCount=currentUser.posts+1;
-                await User.findByIdAndUpdate(req.user.id,{posts:userPostCount})
-
-                res.status(201).json(newPost)
-            
-
-        
+        const currentUser=await User.findById(req.user.id);
+        const userPostCount=currentUser.posts+1;
+        await User.findByIdAndUpdate(req.user.id,{posts:userPostCount})
+        res.status(201).json(newPost)
     } catch (error) {
         return next(new HttpError(error))
     }
@@ -85,34 +74,20 @@ const getUserPosts = async(req,res,next)=>{
 //Edit Post  patch:api/posts/:id   protected
 const editPost = async(req,res,next)=>{
     try {
-        let fileName;
-        let newFilename;
         let updatedPost;
         const postId=req.params.id;
-        let {title,category,description}=req.body;
-        if(!title || !category || !description){
+        let {title,category,description,thumbnail}=req.body;
+        if(!title || !category || !description || !thumbnail){
             return next(new HttpError("Fill in all fields",422))
         }
         const oldPost=await Post.findById(postId);
         if(req.user.id==oldPost.creator){
-
-            if(!req.files){
-                updatedPost=await Post.findByIdAndUpdate(postId,{title,category,description},{new:true})
-        }else{
-            const {thumbnail}=req.files;
-            if(thumbnail.size>2000000){
-                return next(new HttpError("Thumbnail is too big.It should be less than 2 mb "))
-            }
-            fileName=thumbnail.name;                
-            let splittedFilename=fileName.split('.')
-            newFilename=splittedFilename[0]+uuid()+'.'+splittedFilename[splittedFilename.length-1]
-            updatedPost=await Post.findByIdAndUpdate(postId,{title,category,description,thumbnail:newFilename},{new:true})
+                updatedPost=await Post.findByIdAndUpdate(postId,{title,category,description,thumbnail},{new:true})
         }
-            if(!updatedPost){
+        if(!updatedPost){
                 return next(new HttpError("Couldn't update post ",400))
             }
-            res.status(200).json(updatedPost)
-        }
+        res.status(200).json(updatedPost)
     } catch (error) {
         return next(new HttpError(error))
     }
