@@ -82,20 +82,10 @@ const getUser= async (req,res,next)=>{
 //Change User Avatar  post:api/users/change-avatar   protected
 const changeAvatar = async (req, res, next) => {
     try {
-      if (!req.files.avatar) {
-        return next(new HttpError("please choose an image.", 422));
-      }
-  
+        
       const user = await User.findById(req.user.id);
-      const { avatar } = req.files;
-      if (avatar.size > 500000) {
-        return next(new HttpError("Profile picture is too big.It should be less than 500kb", 422));
-      }
-      let fileName;
-      fileName = avatar.name;
-      let splittedFilename = fileName.split('.');
-      let newFilename = splittedFilename[0] + uuid() + '.' + splittedFilename[splittedFilename.length - 1];
-      const updatedAvatar = await User.findByIdAndUpdate(req.user.id, { avatar: newFilename }, { new: true });
+      const { avatar } =req.body;
+      const updatedAvatar = await User.findByIdAndUpdate(req.user.id, { avatar: avatar }, { new: true });
       if (!updatedAvatar) {
         return next(new HttpError("Avatar couldn't be changed.", 422));
       }
