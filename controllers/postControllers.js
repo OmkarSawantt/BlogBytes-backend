@@ -134,7 +134,7 @@ const searchResult = async (req, res, next) => {
         text = String(text).trim();
 
         if (/^$/.test(text)) {
-            return res.json({[});
+            return res.json({[]);
         }
 
         const posts = await Post.find({ title: { $regex: text, $options: 'i' } }).sort({ createdAt: -1 });
