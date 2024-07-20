@@ -107,10 +107,10 @@ const deletePost = async(req,res,next)=>{
             const currentUser=await User.findById(req.user.id);
             const userPostCount=currentUser?.posts-1;
             await User.findByIdAndUpdate(req.user.id,{posts:userPostCount})
-            res.json(
+            res.json({
                 message:"Post is deleted",
                 success:true
-            )
+            });
         }else{
           return next(new HttpError("Post couldn't be deleted",403))
         }
