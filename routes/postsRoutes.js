@@ -10,7 +10,7 @@ router.get('/categories/:category',getCatPosts)
 router.get('/users/:id',getUserPosts)
 router.patch('/:id',authorMiddelware,editPost)
 router.delete('/:id',authorMiddelware,deletePost)
-router.get('/titles',searchSugestion)
+router.post('/titles',searchSugestion)
 router.post('/search',searchResult)
 
 module.exports=router
